@@ -1,6 +1,7 @@
 #include <AppKit/AppKit.h>
 #include "CNC_Window.mm"
 #include "CNC_Platform.mm"
+#include "CNC_Renderer.mm"
 
 #include "CNC_Application.h"
 #include "CNC_Application.cpp"

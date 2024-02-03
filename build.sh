@@ -1,4 +1,4 @@
-FRAMEWORKS='-framework AppKit -framework CoreVideo'
+FRAMEWORKS='-framework AppKit -framework CoreVideo -framework Metal -framework MetalKit'
 TIMEFORMAT=%R
 FLAGS='-std=c++20 --debug'
 
