@@ -8,7 +8,10 @@ void Load( Application* application )
     application->m_permanentMemory = CreateMemoryPool( MEGABYTE(100) );
     application->m_transientMemory = CreateMemoryPool( MEGABYTE(100) );
 
-    application->m_background = platform->loadImage( "res/background.png", application->m_permanentMemory );
+    application->m_background  = platform->loadImage( "res/background.png", application->m_permanentMemory );
+    application->m_hoursHand   = platform->loadImage( "res/hours_hand.png", application->m_permanentMemory );
+    application->m_minutesHand = platform->loadImage( "res/minutes_hand.png", application->m_permanentMemory );
+    application->m_secondsHand = platform->loadImage( "res/seconds_hand.png", application->m_permanentMemory );
 }
 
 void Update( Application* application )
