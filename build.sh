@@ -1,8 +1,9 @@
+FRAMEWORKS='-framework AppKit'
 TIMEFORMAT=%R
 
 platform()
 {
-    clang CNC_Main.mm -o clock --debug
+    clang ${FRAMEWORKS} CNC_Main.mm -o clock --debug
 }
 
 main()
