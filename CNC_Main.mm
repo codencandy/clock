@@ -16,10 +16,9 @@ int main(void)
     bool running = true;
 
     MainWindow* window = CreateMainWindow( &running );
-    struct Platform    Platform = {0};
     struct Application ClockApp = {0};
 
-    InitPlatform( &Platform );
+    InitPlatform( &ClockApp.m_platform );
     Load( &ClockApp );
 
     @autoreleasepool

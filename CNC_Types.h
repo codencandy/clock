@@ -13,6 +13,9 @@ typedef unsigned int   u32;
 typedef unsigned short u16;
 typedef unsigned char   u8;
 
+typedef signed int   s32;
+typedef signed short s16;
+
 typedef float  f32;
 typedef double f64;
 
@@ -23,9 +26,9 @@ typedef simd_float4x4   m4;
 
 struct ImageFile
 {
-    u32   m_width;
-    u32   m_height;
-    void* data;
+    s32   m_width;
+    s32   m_height;
+    void* m_data;
 };
 
 #endif//CNC_TYPES_H

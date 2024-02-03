@@ -21,6 +21,11 @@ struct Application
     Platform    m_platform;
     MemoryPool* m_permanentMemory;
     MemoryPool* m_transientMemory;
+
+    ImageFile*  m_background;
+    ImageFile*  m_hoursHand;
+    ImageFile*  m_minutesHand;
+    ImageFile*  m_secondsHand;
 };
 
 void Load( Application* application );

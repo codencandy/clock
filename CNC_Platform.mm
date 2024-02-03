@@ -1,6 +1,11 @@
+#include "CNC_Types.h"
 #include "CNC_Platform.h"
 #include <stdlib.h>
 #include <assert.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+#define STBI_ONLY_PNG
+#include "libs/stb_image.h"
 
 struct MemoryPool* CreateMemoryPool( u32 sizeInBytes )
 {
@@ -36,6 +41,11 @@ void* AllocateStruct( u32 sizeInBytes, struct MemoryPool* pool )
 struct ImageFile* LoadImageFile( const char* filename, struct MemoryPool* pool )
 {
     struct ImageFile* image = AllocStruct( struct ImageFile, pool );
+
+    s32 channels = 0;
+    image->m_data = stbi_load( filename, &image->m_width, &image->m_height, &channels, 4 );
+
+    assert( image->m_data != NULL );
 
     return image;
 }

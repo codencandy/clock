@@ -3,7 +3,12 @@
 
 void Load( Application* application )
 {
-    
+    Platform* platform = &application->m_platform;
+
+    application->m_permanentMemory = CreateMemoryPool( MEGABYTE(100) );
+    application->m_transientMemory = CreateMemoryPool( MEGABYTE(100) );
+
+    application->m_background = platform->loadImage( "res/background.png", application->m_permanentMemory );
 }
 
 void Update( Application* application )
