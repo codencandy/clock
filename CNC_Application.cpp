@@ -3,7 +3,7 @@
 
 void Load( Application* application )
 {
-    // load resources
+    
 }
 
 void Update( Application* application )

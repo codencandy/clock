@@ -1,5 +1,6 @@
 #include <AppKit/AppKit.h>
 #include "CNC_Window.mm"
+#include "CNC_Platform.mm"
 
 #include "CNC_Application.h"
 #include "CNC_Application.cpp"
@@ -15,8 +16,10 @@ int main(void)
     bool running = true;
 
     MainWindow* window = CreateMainWindow( &running );
+    struct Platform    Platform = {0};
     struct Application ClockApp = {0};
 
+    InitPlatform( &Platform );
     Load( &ClockApp );
 
     @autoreleasepool

@@ -2,6 +2,7 @@
 #define CNC_APPLICATION_H
 
 #include "CNC_Types.h"
+#include "CNC_Platform.h"
 
 struct Clock
 {
@@ -16,7 +17,10 @@ struct Clock
 
 struct Application
 {
-    Clock m_clock;
+    Clock       m_clock;
+    Platform    m_platform;
+    MemoryPool* m_permanentMemory;
+    MemoryPool* m_transientMemory;
 };
 
 void Load( Application* application );
