@@ -1,4 +1,4 @@
-FRAMEWORKS='-framework AppKit'
+FRAMEWORKS='-framework AppKit -framework CoreVideo'
 TIMEFORMAT=%R
 
 platform()

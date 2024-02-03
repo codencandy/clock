@@ -31,6 +31,7 @@ int main(void)
             while( event != NULL );
 
             // run your code here
+            [window->m_displayLinkSignal wait];
         }
     }
 
