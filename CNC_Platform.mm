@@ -20,11 +20,12 @@ struct MemoryPool* CreateMemoryPool( u32 sizeInBytes )
     return pool;
 }
 
-void InitPlatform( struct Platform* platform )
+void InitPlatform( struct Platform* platform, void* renderer )
 {
     platform->loadImage     = &LoadImageFile;
     platform->uploadToGpu   = &UploadToGpu;
     platform->freeImageFile = &FreeImageFile;
+    platform->m_renderer    = renderer;
 }
 
 void* AllocateStruct( u32 sizeInBytes, struct MemoryPool* pool )

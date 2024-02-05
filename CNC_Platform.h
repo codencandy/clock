@@ -22,7 +22,7 @@ struct Platform
 };
 
 struct MemoryPool* CreateMemoryPool( u32 sizeInBytes );
-void               InitPlatform( struct Platform* platform );
+void               InitPlatform( struct Platform* platform, void* renderer );
 void*              AllocateStruct( u32 sizeInBytes, struct MemoryPool* pool );
 
 struct ImageFile*  LoadImageFile( const char* filename, struct MemoryPool* pool );

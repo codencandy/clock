@@ -16,10 +16,16 @@ int main(void)
 
     bool running = true;
 
-    MainWindow* window = CreateMainWindow( &running );
-    struct Application ClockApp = {0};
+    MainWindow* window   = CreateMainWindow( &running );
+    Renderer*   renderer = CreateRenderer( SCREEN_WIDTH, SCREEN_HEIGHT );
 
-    InitPlatform( &ClockApp.m_platform );
+    window.contentView = renderer->m_view;
+        
+    struct Application ClockApp      = {0};
+    struct Platform    MacosPlatform = {0};
+    InitPlatform( &MacosPlatform, renderer );
+
+    ClockApp.m_platform = MacosPlatform;
     Load( &ClockApp );
 
     @autoreleasepool
@@ -44,6 +50,8 @@ int main(void)
             // run your code here
             Update( &ClockApp );
             Render( &ClockApp );
+
+            [renderer Render];
         }
     }
 
