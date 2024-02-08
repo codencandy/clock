@@ -31,4 +31,16 @@ struct ImageFile
     void* m_data;
 };
 
+// mirror image of the types passed to the shader
+struct VertexInput
+{
+    v3 m_position;
+    v2 m_uv;
+};
+
+struct UniformData
+{
+    m4 m_projection2d;
+};
+
 #endif//CNC_TYPES_H
