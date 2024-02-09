@@ -18,6 +18,10 @@ void CheckError( NSError* error )
         id<MTLCommandQueue>        m_queue;
         id<MTLRenderPipelineState> m_pipelineState;
         MTKView*                   m_view;
+
+        struct VertexInput         m_quadVertices[6];
+        struct UniformData         m_uniform;
+        id<MTLBuffer>              m_uniformBuffer;
 }
 
 - (void)Prepare;
@@ -109,6 +113,80 @@ void CheckError( NSError* error )
 
 @end
 
+void CreateQuad( Renderer* renderer, f32 w, f32 h )
+{
+    /*
+        D ---- C
+        |      |
+        A ---- B
+     */
+     struct VertexInput* quad = renderer->m_quadVertices;
+
+    v3 A = { 0.0,   h, 0.0 };
+    v3 B = {   w,   h, 0.0 };
+    v3 C = {   w, 0.0, 0.0 };
+    v3 D = { 0.0, 0.0, 0.0 };
+
+    quad[0].m_position = A;
+    quad[1].m_position = B;
+    quad[2].m_position = C;
+    quad[3].m_position = C;
+    quad[4].m_position = D;
+    quad[5].m_position = A;    
+}
+
+void CreateProjection2d( Renderer* renderer, f32 w, f32 h )
+{
+    /*
+        upper left in world space is 0,0
+        upper left in projection space -1,1
+
+        lower right in world space is 1,1
+        lower right in projection space is 1,-1
+
+        |x| |a 0 0 e|
+        |y| |0 b 0 f|
+        |0| |0 0 1 0|
+        |1| |0 0 0 1|
+
+        result is:
+        (x*a) + (y*0) + (0*0) + (1*e)
+        (x*0) + (y*b) + (0*1) + (1*f)
+        0
+        1
+
+        now we need to solve this for a, b, e and f
+        
+        with x=0 we get x'=-1
+        f(0) = 0 + 0 + 0 + 1*e = -1 => e = -1
+        
+        with x=w we get x'=1
+        f(w) = (w*a) + 0 + 0 - 1 = 1
+        w*a = 2 => a = 2/w
+        
+        with y=0 we get y'=1
+        f(0) = 0 + 0 + 0 + f = 1 => f = 1
+        
+        with y=h we get y'=-1
+        f(h) = 0 + (h*b) + 0 + 1 = -1
+        h*b + 1 = -1
+        h*b = -2
+        b = -2/h
+     */
+
+    f32 e = -1.0f;     
+    f32 f =  1.0f;
+    f32 a =  2.0f/w;
+    f32 b = -2.0f/h;
+
+    v4 row1 = { 2.0f/w,    0.0f, 0.0f,    e };
+    v4 row2 = {   0.0f, -2.0f/h, 0.0f,    f };
+    v4 row3 = {   0.0f,    0.0f, 1.0f, 0.0f };
+    v4 row4 = {   0.0f,    0.0f, 0.0f, 1.0f };
+
+    renderer->m_uniform.m_projection2d = simd_matrix_from_rows( row1, row2, row3, row4 );
+}
+
 Renderer* CreateRenderer( u32 width, u32 height )
 {
     Renderer* renderer = [Renderer new];
@@ -123,6 +201,12 @@ Renderer* CreateRenderer( u32 width, u32 height )
     renderer->m_view.clearColor = MTLClearColorMake( 1.0, 0.0, 1.0, 1.0 );
 
     [renderer Prepare];
+    
+    f32 w = renderer->m_view.frame.size.width;
+    f32 h = renderer->m_view.frame.size.height;
+    
+    CreateQuad( renderer, w, h );
+    CreateProjection2d( renderer, w, h );
 
     return renderer;
 }

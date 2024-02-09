@@ -21,6 +21,7 @@ typedef double f64;
 
 typedef simd_float2     v2;
 typedef simd_float3     v3;
+typedef simd_float4     v4;
 typedef simd_float3x3   m3;
 typedef simd_float4x4   m4;
 
