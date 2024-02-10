@@ -122,17 +122,34 @@ void CreateQuad( Renderer* renderer, f32 w, f32 h )
      */
      struct VertexInput* quad = renderer->m_quadVertices;
 
-    v3 A = { 0.0,   h, 0.0 };
-    v3 B = {   w,   h, 0.0 };
-    v3 C = {   w, 0.0, 0.0 };
-    v3 D = { 0.0, 0.0, 0.0 };
+    v3 A = { 0.0f,    h, 0.0f };
+    v3 B = {    w,    h, 0.0f };
+    v3 C = {    w, 0.0f, 0.0f };
+    v3 D = { 0.0f, 0.0f, 0.0f };
+
+    /*
+        P4 ---- P3
+        |       |
+        P1 ---- P2
+     */
+
+    v2 P1 = { 0.0f, 0.0f };
+    v2 P2 = { 1.0f, 0.0f };
+    v2 P3 = { 1.0f, 1.0f };
+    v2 P4 = { 0.0f, 1.0f };
 
     quad[0].m_position = A;
+    quad[0].m_uv       = P1;
     quad[1].m_position = B;
+    quad[1].m_uv       = P2;
     quad[2].m_position = C;
+    quad[2].m_uv       = P3;
     quad[3].m_position = C;
+    quad[3].m_uv       = P3;
     quad[4].m_position = D;
-    quad[5].m_position = A;    
+    quad[4].m_uv       = P4;
+    quad[5].m_position = A;  
+    quad[5].m_uv       = P1;  
 }
 
 void CreateProjection2d( Renderer* renderer, f32 w, f32 h )
