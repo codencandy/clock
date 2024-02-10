@@ -42,6 +42,7 @@ struct VertexInput
 struct UniformData
 {
     m4 m_projection2d;
+    v2 m_screenSize;
 };
 
 #endif//CNC_TYPES_H

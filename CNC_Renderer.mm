@@ -108,7 +108,13 @@ void CheckError( NSError* error )
 
 - (void)mtkView:(nonnull MTKView *)view drawableSizeWillChange:(CGSize)size
 {
+    f32 w = size.width;
+    f32 h = size.height;
 
+    v2 screenSize = { w, h };
+    m_uniform.m_screenSize = screenSize;
+
+    memcpy( [m_uniformBuffer contents], &m_uniform, sizeof( struct UniformData ) );
 }
 
 @end
@@ -201,7 +207,14 @@ void CreateProjection2d( Renderer* renderer, f32 w, f32 h )
     v4 row3 = {   0.0f,    0.0f, 1.0f, 0.0f };
     v4 row4 = {   0.0f,    0.0f, 0.0f, 1.0f };
 
+    v2 screenSize = { w, h };
     renderer->m_uniform.m_projection2d = simd_matrix_from_rows( row1, row2, row3, row4 );
+    renderer->m_uniform.m_screenSize   = screenSize;
+
+    renderer->m_uniformBuffer = [renderer->m_device newBufferWithLength: sizeof( struct UniformData )
+                                                                options: MTLResourceCPUCacheModeDefaultCache];
+
+    memcpy( [renderer->m_uniformBuffer contents], &renderer->m_uniform, sizeof( struct UniformData ) );
 }
 
 Renderer* CreateRenderer( u32 width, u32 height )

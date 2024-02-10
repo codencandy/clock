@@ -17,6 +17,7 @@ struct VertexOutput
 struct UniformData
 {
     float4x4 m_projection2d;
+    float2   m_screenSize;
 };
 
 vertex VertexOutput VertexShader( VertexInput in [[stage_in]],
