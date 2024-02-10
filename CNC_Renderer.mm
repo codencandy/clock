@@ -16,7 +16,7 @@ void CheckError( NSError* error )
     @public
         id<MTLDevice>              m_device;
         id<MTLCommandQueue>        m_queue;
-        id<MTLRenderPipelineState> m_pipelineState;
+        id<MTLRenderPipelineState> m_renderPipelineState;
         MTKView*                   m_view;
 
         struct VertexInput         m_quadVertices[6];
@@ -80,7 +80,7 @@ void CheckError( NSError* error )
     renderDesc.vertexFunction   = vertexShader;
     renderDesc.fragmentFunction = fragmentShader;
 
-    m_pipelineState = [m_device newRenderPipelineStateWithDescriptor:renderDesc error: &error];
+    m_renderPipelineState = [m_device newRenderPipelineStateWithDescriptor:renderDesc error: &error];
 
     CheckError( error );
 }
@@ -94,12 +94,15 @@ void CheckError( NSError* error )
 {
     @autoreleasepool
     {
-        id<MTLCommandBuffer> commandBuffer = [m_queue commandBuffer];
-        id<MTLCommandEncoder> commandEncoder = [commandBuffer renderCommandEncoderWithDescriptor:[m_view currentRenderPassDescriptor]];
+        id<MTLCommandBuffer>        commandBuffer = [m_queue commandBuffer];
+        id<MTLRenderCommandEncoder> encoder = [commandBuffer renderCommandEncoderWithDescriptor:[m_view currentRenderPassDescriptor]];
 
+        [encoder setRenderPipelineState: m_renderPipelineState];
+        [encoder setVertexBytes: m_quadVertices length: sizeof( struct VertexInput ) * 6 atIndex:0];
+        [encoder setVertexBuffer: m_uniformBuffer offset: 0 atIndex: 0];
+        [encoder drawPrimitives: MTLPrimitiveTypeTriangle vertexStart: 0 vertexCount: 6];
         
-        
-        [commandEncoder endEncoding];
+        [encoder endEncoding];
 
         [commandBuffer presentDrawable:[m_view currentDrawable]];
         [commandBuffer commit];
