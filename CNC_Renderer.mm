@@ -107,6 +107,8 @@ void CheckError( NSError* error )
     textureDesc.pixelFormat = MTLPixelFormatRGBA8Unorm;
     id<MTLTexture> texture  = [m_device newTextureWithDescriptor: textureDesc];
 
+    MTLRegion region = MTLRegionMake2D( 0, 0, image->m_width, image->m_height );
+    [texture replaceRegion: region mipmapLevel: 0 withBytes: image->m_data bytesPerRow:image->m_width * 4];
     [m_textures addObject: texture];
 
     m_nextTextureId++;
