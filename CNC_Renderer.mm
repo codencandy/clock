@@ -99,7 +99,7 @@ void CheckError( NSError* error )
 
         [encoder setRenderPipelineState: m_renderPipelineState];
         [encoder setVertexBytes: m_quadVertices length: sizeof( struct VertexInput ) * 6 atIndex:0];
-        [encoder setVertexBuffer: m_uniformBuffer offset: 0 atIndex: 0];
+        [encoder setVertexBuffer: m_uniformBuffer offset: 0 atIndex: 1];
         [encoder drawPrimitives: MTLPrimitiveTypeTriangle vertexStart: 0 vertexCount: 6];
         
         [encoder endEncoding];
@@ -129,7 +129,7 @@ void CreateQuad( Renderer* renderer, f32 w, f32 h )
         |      |
         A ---- B
      */
-     struct VertexInput* quad = renderer->m_quadVertices;
+    struct VertexInput* quad = renderer->m_quadVertices;
 
     v3 A = { 0.0f,    h, 0.0f };
     v3 B = {    w,    h, 0.0f };

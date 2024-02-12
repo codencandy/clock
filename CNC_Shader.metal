@@ -21,7 +21,7 @@ struct UniformData
 };
 
 vertex VertexOutput VertexShader( VertexInput in [[stage_in]],
-                                  constant UniformData& uniform [[buffer(0)]] )
+                                  constant UniformData& uniform [[buffer(1)]] )
 {
     VertexOutput out;
 
