@@ -51,13 +51,6 @@ struct ImageFile* LoadImageFile( const char* filename, struct MemoryPool* pool )
     return image;
 }
 
-u32 UploadToGpu( struct ImageFile* image, void* renderer )
-{
-    u32 textureId = 0;
-
-    return textureId;
-}
-
 void FreeImageFile( struct ImageFile* image )
 {
 

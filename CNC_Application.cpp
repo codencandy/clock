@@ -8,10 +8,22 @@ void Load( Application* application )
     application->m_permanentMemory = CreateMemoryPool( MEGABYTE(100) );
     application->m_transientMemory = CreateMemoryPool( MEGABYTE(100) );
 
-    application->m_background  = platform->loadImage( "res/background.png", application->m_permanentMemory );
-    application->m_hoursHand   = platform->loadImage( "res/hours_hand.png", application->m_permanentMemory );
-    application->m_minutesHand = platform->loadImage( "res/minutes_hand.png", application->m_permanentMemory );
-    application->m_secondsHand = platform->loadImage( "res/seconds_hand.png", application->m_permanentMemory );
+    ImageFile* background  = platform->loadImage( "res/background.png", application->m_permanentMemory );
+    ImageFile* hoursHand   = platform->loadImage( "res/hours_hand.png", application->m_permanentMemory );
+    ImageFile* minutesHand = platform->loadImage( "res/minutes_hand.png", application->m_permanentMemory );
+    ImageFile* secondsHand = platform->loadImage( "res/seconds_hand.png", application->m_permanentMemory );
+
+    void* renderer = platform->m_renderer;
+
+    background->m_textureId  = platform->uploadToGpu( background, renderer );
+    hoursHand->m_textureId   = platform->uploadToGpu( hoursHand, renderer );
+    minutesHand->m_textureId = platform->uploadToGpu( minutesHand, renderer );
+    secondsHand->m_textureId = platform->uploadToGpu( secondsHand, renderer );
+
+    application->m_background  = background;
+    application->m_hoursHand   = hoursHand;
+    application->m_minutesHand = minutesHand;
+    application->m_secondsHand = secondsHand;
 }
 
 void Update( Application* application )

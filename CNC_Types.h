@@ -29,6 +29,7 @@ struct ImageFile
 {
     s32   m_width;
     s32   m_height;
+    u32   m_textureId;
     void* m_data;
 };
 

@@ -22,10 +22,14 @@ void CheckError( NSError* error )
         struct VertexInput         m_quadVertices[6];
         struct UniformData         m_uniform;
         id<MTLBuffer>              m_uniformBuffer;
+
+        u32                        m_nextTextureId;
+        NSMutableArray*            m_textures;
 }
 
 - (void)Prepare;
 - (void)Render;
+- (u32)UploadTexture:(struct ImageFile*)image;
 
 @end
 
@@ -83,11 +87,30 @@ void CheckError( NSError* error )
     m_renderPipelineState = [m_device newRenderPipelineStateWithDescriptor:renderDesc error: &error];
 
     CheckError( error );
+
+    m_textures      = [[NSMutableArray alloc] initWithCapacity:10];
+    m_nextTextureId = 0;
 }
 
 - (void)Render
 {
     [m_view draw];
+}
+
+- (u32)UploadTexture:(struct ImageFile*)image
+{
+    u32 textureId = m_nextTextureId;
+
+    MTLTextureDescriptor* textureDesc = [MTLTextureDescriptor new];
+    textureDesc.width       = image->m_width;
+    textureDesc.height      = image->m_height;
+    textureDesc.pixelFormat = MTLPixelFormatRGBA8Unorm;
+    id<MTLTexture> texture  = [m_device newTextureWithDescriptor: textureDesc];
+
+    [m_textures addObject: texture];
+
+    m_nextTextureId++;
+    return textureId;
 }
 
 - (void)drawInMTKView:(nonnull MTKView *)view
@@ -242,4 +265,12 @@ Renderer* CreateRenderer( u32 width, u32 height )
     CreateProjection2d( renderer, w, h );
 
     return renderer;
+}
+
+u32 UploadToGpu( struct ImageFile* image, void* renderer )
+{
+    Renderer* macosRenderer = (Renderer*)renderer;
+    u32 textureId = [macosRenderer UploadTexture: image];
+
+    return textureId;
 }
