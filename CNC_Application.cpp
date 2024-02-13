@@ -50,7 +50,39 @@ void Update( Application* application )
 
 void Render( Application* application )
 {
+    MemoryPool* transientPool = application->m_transientMemory;
+    ClearMemoryPool( transientPool );
+
     // render the clock
+
+    DrawCall* background = AllocStruct( DrawCall, transientPool );
+    DrawCall* hours      = AllocStruct( DrawCall, transientPool );
+    DrawCall* minutes    = AllocStruct( DrawCall, transientPool );
+    DrawCall* seconds    = AllocStruct( DrawCall, transientPool );
+
+    ImageFile* backgroundImg = application->m_background;
+    background->m_textureId = backgroundImg->m_textureId;
+    background->m_size      = vec2( backgroundImg->m_width, backgroundImg->m_height );
+    background->m_position  = vec2( 0.0f, 0.0f );
+    background->m_angle     = 0.0f;
+
+    ImageFile* hoursImg     = application->m_hoursHand;
+    hours->m_textureId      = hoursImg->m_textureId;
+    hours->m_size           = vec2( hoursImg->m_width, hoursImg->m_height );
+    hours->m_position       = vec2( 0.0f, 0.0f );
+    hours->m_angle          = application->m_clock.m_hoursAngle;
+
+    ImageFile* minutesImg   = application->m_minutesHand;
+    minutes->m_textureId    = minutesImg->m_textureId;
+    minutes->m_size         = vec2( minutesImg->m_width, minutesImg->m_height );
+    minutes->m_position     = vec2( 0.0f, 0.0f );
+    minutes->m_angle        = application->m_clock.m_minutesAngle;
+
+    ImageFile* secondsImg   = application->m_secondsHand;
+    seconds->m_textureId    = secondsImg->m_textureId;
+    seconds->m_size         = vec2( secondsImg->m_width, secondsImg->m_height );
+    seconds->m_position     = vec2( 0.0f, 0.0f );
+    seconds->m_angle        = application->m_clock.m_secondsAngle;
 }
 
 void Exit( Application* application )

@@ -39,6 +39,12 @@ void* AllocateStruct( u32 sizeInBytes, struct MemoryPool* pool )
     return data;
 }
 
+void ClearMemoryPool( struct MemoryPool* pool )
+{
+    pool->m_freeBytes = pool->m_size;
+    pool->m_usedBytes = 0;
+}
+
 struct ImageFile* LoadImageFile( const char* filename, struct MemoryPool* pool )
 {
     struct ImageFile* image = AllocStruct( struct ImageFile, pool );
@@ -55,3 +61,4 @@ void FreeImageFile( struct ImageFile* image )
 {
     stbi_image_free( image->m_data );
 }
+

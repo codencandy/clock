@@ -25,6 +25,22 @@ typedef simd_float4     v4;
 typedef simd_float3x3   m3;
 typedef simd_float4x4   m4;
 
+v2 vec2( f32 a, f32 b )
+{
+    v2 result;
+    result.x = a;
+    result.y = b;
+    return result;
+}
+
+struct DrawCall
+{
+    u32 m_textureId;
+    v2  m_position; // upper left corner
+    v2  m_size;
+    f32 m_angle;
+};
+
 struct ImageFile
 {
     s32   m_width;
