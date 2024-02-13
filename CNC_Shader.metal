@@ -20,6 +20,8 @@ struct UniformData
     float2   m_screenSize;
 };
 
+constexpr sampler textureSampler(mag_filter::linear, min_filter::linear);
+
 vertex VertexOutput VertexShader( VertexInput in [[stage_in]],
                                   constant UniformData& uniform [[buffer(1)]] )
 {
@@ -32,8 +34,9 @@ vertex VertexOutput VertexShader( VertexInput in [[stage_in]],
     return out;
 }                   
 
-fragment float4 FragmentShader( VertexOutput in [[stage_in]] )
+fragment float4 FragmentShader( VertexOutput in [[stage_in]],
+                                texture2d<float> image )
 {
-    float4 color = float4( 1.0, 0.0, 0.0, 1.0 );
+    float4 color = image.sample( textureSampler, in.m_uv );
     return color;
 }

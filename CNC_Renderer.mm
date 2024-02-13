@@ -125,6 +125,7 @@ void CheckError( NSError* error )
         [encoder setRenderPipelineState: m_renderPipelineState];
         [encoder setVertexBytes: m_quadVertices length: sizeof( struct VertexInput ) * 6 atIndex:0];
         [encoder setVertexBuffer: m_uniformBuffer offset: 0 atIndex: 1];
+        [encoder setFragmentTexture: [m_textures objectAtIndex: 0] atIndex:0];
         [encoder drawPrimitives: MTLPrimitiveTypeTriangle vertexStart: 0 vertexCount: 6];
         
         [encoder endEncoding];
