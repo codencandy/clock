@@ -83,6 +83,8 @@ void Render( Application* application )
     seconds->m_size         = vec2( secondsImg->m_width, secondsImg->m_height );
     seconds->m_position     = vec2( 0.0f, 0.0f );
     seconds->m_angle        = application->m_clock.m_secondsAngle;
+
+    application->m_platform.submitDrawCalls( transientPool->m_memory, 4, application->m_platform.m_renderer );
 }
 
 void Exit( Application* application )

@@ -25,7 +25,10 @@ void CheckError( NSError* error )
 
         u32                        m_nextTextureId;
         NSMutableArray*            m_textures;
-}
+
+        u32                        m_nrOfDrawCalls;
+        void*                      m_drawCallMemory;
+};
 
 - (void)Prepare;
 - (void)Render;
@@ -123,11 +126,16 @@ void CheckError( NSError* error )
         id<MTLRenderCommandEncoder> encoder = [commandBuffer renderCommandEncoderWithDescriptor:[m_view currentRenderPassDescriptor]];
 
         [encoder setRenderPipelineState: m_renderPipelineState];
-        [encoder setVertexBytes: m_quadVertices length: sizeof( struct VertexInput ) * 6 atIndex:0];
-        [encoder setVertexBuffer: m_uniformBuffer offset: 0 atIndex: 1];
-        [encoder setFragmentTexture: [m_textures objectAtIndex: 0] atIndex:0];
-        [encoder drawPrimitives: MTLPrimitiveTypeTriangle vertexStart: 0 vertexCount: 6];
-        
+
+        struct DrawCall* drawCalls = (struct DrawCall*)m_drawCallMemory;
+        for( u32 i=0; i<m_nrOfDrawCalls; ++i )
+        {
+            struct DrawCall* call = &drawCalls[i];
+            [encoder setVertexBytes: m_quadVertices length: sizeof( struct VertexInput ) * 6 atIndex:0];
+            [encoder setVertexBuffer: m_uniformBuffer offset: 0 atIndex: 1];
+            [encoder setFragmentTexture: [m_textures objectAtIndex: call->m_textureId ] atIndex:0];
+            [encoder drawPrimitives: MTLPrimitiveTypeTriangle vertexStart: 0 vertexCount: 6];
+        }
         [encoder endEncoding];
 
         [commandBuffer presentDrawable:[m_view currentDrawable]];
@@ -276,4 +284,11 @@ u32 UploadToGpu( struct ImageFile* image, void* renderer )
     u32 textureId = [macosRenderer UploadTexture: image];
 
     return textureId;
+}
+
+void SubmitDrawCalls( void* memory, u32 numberOfDrawCalls, void* renderer )
+{
+    Renderer* macosRenderer = (Renderer*)renderer;
+    macosRenderer->m_drawCallMemory = memory;
+    macosRenderer->m_nrOfDrawCalls  = numberOfDrawCalls;
 }

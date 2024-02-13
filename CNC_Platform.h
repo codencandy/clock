@@ -17,6 +17,7 @@ struct Platform
     ImageFile* (*loadImage)(const char* imageFile, struct MemoryPool* pool );
     u32  (*uploadToGpu)(ImageFile* image, void* renderer);
     void (*freeImageFile)(ImageFile* image );
+    void (*submitDrawCalls)(void*, u32, void* );
 
     void* m_renderer;
 };
@@ -29,6 +30,7 @@ void               ClearMemoryPool( struct MemoryPool* pool );
 struct ImageFile*  LoadImageFile( const char* filename, struct MemoryPool* pool );
 u32                UploadToGpu( ImageFile* image, void* renderer );
 void               FreeImageFile( ImageFile* image );
+void               SubmitDrawCalls( void* memory, u32 numberOfDrawCalls, void* renderer );
 
 #define AllocStruct( x, pool ) (x*)AllocateStruct( sizeof(x), pool )
 
