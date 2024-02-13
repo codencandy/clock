@@ -53,5 +53,5 @@ struct ImageFile* LoadImageFile( const char* filename, struct MemoryPool* pool )
 
 void FreeImageFile( struct ImageFile* image )
 {
-
+    stbi_image_free( image->m_data );
 }

@@ -24,6 +24,11 @@ void Load( Application* application )
     application->m_hoursHand   = hoursHand;
     application->m_minutesHand = minutesHand;
     application->m_secondsHand = secondsHand;
+
+    platform->freeImageFile( background );
+    platform->freeImageFile( hoursHand );
+    platform->freeImageFile( minutesHand );
+    platform->freeImageFile( secondsHand );
 }
 
 void Update( Application* application )
