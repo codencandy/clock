@@ -87,6 +87,16 @@ void CheckError( NSError* error )
     renderDesc.vertexFunction   = vertexShader;
     renderDesc.fragmentFunction = fragmentShader;
 
+    renderDesc.colorAttachments[0].blendingEnabled = true;
+    renderDesc.colorAttachments[0].alphaBlendOperation = MTLBlendOperationAdd;
+    renderDesc.colorAttachments[0].rgbBlendOperation   = MTLBlendOperationAdd;
+
+    renderDesc.colorAttachments[0].sourceAlphaBlendFactor = MTLBlendFactorSourceAlpha;
+    renderDesc.colorAttachments[0].sourceRGBBlendFactor   = MTLBlendFactorSourceAlpha;
+
+    renderDesc.colorAttachments[0].destinationAlphaBlendFactor = MTLBlendFactorOneMinusSourceAlpha;
+    renderDesc.colorAttachments[0].destinationRGBBlendFactor   = MTLBlendFactorOneMinusSourceAlpha;
+
     m_renderPipelineState = [m_device newRenderPipelineStateWithDescriptor:renderDesc error: &error];
 
     CheckError( error );
