@@ -40,6 +40,17 @@ void* AllocateStruct( u32 sizeInBytes, struct MemoryPool* pool )
     return data;
 }
 
+void* AllocateBytes( u32 sizeInBytes, struct MemoryPool* pool )
+{
+    assert( pool->m_freeBytes >= sizeInBytes );
+    void* data = (u8*)pool->m_memory + pool->m_usedBytes;
+
+    pool->m_usedBytes += sizeInBytes;
+    pool->m_freeBytes -= sizeInBytes;
+
+    return data;
+}
+
 void ClearMemoryPool( struct MemoryPool* pool )
 {
     pool->m_freeBytes = pool->m_size;

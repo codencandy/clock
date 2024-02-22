@@ -26,6 +26,8 @@ struct Application
     ImageFile*  m_hoursHand;
     ImageFile*  m_minutesHand;
     ImageFile*  m_secondsHand;
+
+    VertexInput* m_vertices;
 };
 
 void Load( Application* application );

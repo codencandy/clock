@@ -33,22 +33,6 @@ v2 vec2( f32 a, f32 b )
     return result;
 }
 
-struct DrawCall
-{
-    u32 m_textureId;
-    v2  m_position; // upper left corner
-    v2  m_size;
-    f32 m_angle;
-};
-
-struct ImageFile
-{
-    s32   m_width;
-    s32   m_height;
-    u32   m_textureId;
-    void* m_data;
-};
-
 // mirror image of the types passed to the shader
 struct VertexInput
 {
@@ -62,5 +46,23 @@ struct UniformData
     m4 m_projection2d;
     v2 m_screenSize;
 };
+
+struct DrawCall
+{
+    u32          m_textureId;
+    v2           m_position; // upper left corner
+    v2           m_size;
+    f32          m_angle;
+    VertexInput* m_vertices;
+};
+
+struct ImageFile
+{
+    s32   m_width;
+    s32   m_height;
+    u32   m_textureId;
+    void* m_data;
+};
+
 
 #endif//CNC_TYPES_H

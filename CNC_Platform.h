@@ -33,5 +33,6 @@ void               FreeImageFile( ImageFile* image );
 void               SubmitDrawCalls( void* memory, u32 numberOfDrawCalls, void* renderer );
 
 #define AllocStruct( x, pool ) (x*)AllocateStruct( sizeof(x), pool )
+#define AllocBytes(  x, pool )     AllocateBytes( x, pool )
 
 #endif//CNC_PLATFORM_H

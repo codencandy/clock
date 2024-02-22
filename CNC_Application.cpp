@@ -25,6 +25,8 @@ void Load( Application* application )
     application->m_minutesHand = minutesHand;
     application->m_secondsHand = secondsHand;
 
+    application->m_vertices    = (VertexInput*)AllocBytes( sizeof( VertexInput) * 6 * 4, application->m_permanentMemory );
+
     platform->freeImageFile( background );
     platform->freeImageFile( hoursHand );
     platform->freeImageFile( minutesHand );
