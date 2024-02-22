@@ -19,7 +19,6 @@ void CheckError( NSError* error )
         id<MTLRenderPipelineState> m_renderPipelineState;
         MTKView*                   m_view;
 
-        struct VertexInput         m_quadVertices[6];
         struct UniformData         m_uniform;
         id<MTLBuffer>              m_uniformBuffer;
 
@@ -141,11 +140,13 @@ void CheckError( NSError* error )
 
         [encoder setRenderPipelineState: m_renderPipelineState];
 
+        // only need once
+        
         struct DrawCall* drawCalls = (struct DrawCall*)m_drawCallMemory;
         for( u32 i=0; i<m_nrOfDrawCalls; ++i )
         {
             struct DrawCall* call = &drawCalls[i];
-            [encoder setVertexBytes: m_quadVertices length: sizeof( struct VertexInput ) * 6 atIndex:0];
+            [encoder setVertexBytes: call->m_vertices length: sizeof( struct VertexInput ) * 6 atIndex:0];
             [encoder setVertexBuffer: m_uniformBuffer offset: 0 atIndex: 1];
             [encoder setFragmentTexture: [m_textures objectAtIndex: call->m_textureId ] atIndex:0];
             [encoder drawPrimitives: MTLPrimitiveTypeTriangle vertexStart: 0 vertexCount: 6];
@@ -169,45 +170,6 @@ void CheckError( NSError* error )
 }
 
 @end
-
-void CreateQuad( Renderer* renderer, f32 w, f32 h )
-{
-    /*
-        D ---- C
-        |      |
-        A ---- B
-     */
-    struct VertexInput* quad = renderer->m_quadVertices;
-
-    v3 A = { 0.0f,    h, 0.0f };
-    v3 B = {    w,    h, 0.0f };
-    v3 C = {    w, 0.0f, 0.0f };
-    v3 D = { 0.0f, 0.0f, 0.0f };
-
-    /*
-        P4 ---- P3
-        |       |
-        P1 ---- P2
-     */
-
-    v2 P1 = { 0.0f, 0.0f };
-    v2 P2 = { 1.0f, 0.0f };
-    v2 P3 = { 1.0f, 1.0f };
-    v2 P4 = { 0.0f, 1.0f };
-
-    quad[0].m_position = A;
-    quad[0].m_uv       = P1;
-    quad[1].m_position = B;
-    quad[1].m_uv       = P2;
-    quad[2].m_position = C;
-    quad[2].m_uv       = P3;
-    quad[3].m_position = C;
-    quad[3].m_uv       = P3;
-    quad[4].m_position = D;
-    quad[4].m_uv       = P4;
-    quad[5].m_position = A;  
-    quad[5].m_uv       = P1;  
-}
 
 void CreateProjection2d( Renderer* renderer, f32 w, f32 h )
 {
@@ -286,7 +248,6 @@ Renderer* CreateRenderer( u32 width, u32 height )
     f32 w = renderer->m_view.frame.size.width;
     f32 h = renderer->m_view.frame.size.height;
     
-    CreateQuad( renderer, w, h );
     CreateProjection2d( renderer, w, h );
 
     return renderer;
