@@ -6,6 +6,7 @@ struct VertexInput
 {
     float3 m_position [[attribute(0)]];
     float2 m_uv       [[attribute(1)]];
+    float  m_angle    [[attribute(2)]];
 };
 
 struct VertexOutput
@@ -27,9 +28,18 @@ vertex VertexOutput VertexShader( VertexInput in [[stage_in]],
 {
     VertexOutput out;
 
-    float4 position = float4( in.m_position, 1.0 );
-    out.m_position  = uniform.m_projection2d * position;
-    out.m_uv        = in.m_uv;
+    float angle = in.m_angle;
+    // rotate the vertices 
+    float2x2 rotationMatrix = {
+        { cos(angle), -sin(angle) }, // important to define row major
+        { sin(angle),  cos(angle) }  // important to define row major
+    };
+
+    float4 position   = float4( in.m_position, 1.0 );
+
+    out.m_position    = uniform.m_projection2d * position;
+    out.m_position.xy = out.m_position.xy * rotationMatrix;
+    out.m_uv          = in.m_uv;
 
     return out;
 }                   

@@ -54,7 +54,6 @@ void Render( Application* application )
     ClearMemoryPool( transientPool );
 
     // render the clock
-
     DrawCall* background = AllocStruct( DrawCall, transientPool );
     DrawCall* hours      = AllocStruct( DrawCall, transientPool );
     DrawCall* minutes    = AllocStruct( DrawCall, transientPool );

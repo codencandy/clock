@@ -52,8 +52,9 @@ struct ImageFile
 // mirror image of the types passed to the shader
 struct VertexInput
 {
-    v3 m_position;
-    v2 m_uv;
+    v3  m_position;
+    v2  m_uv;
+    f32 m_angle;
 };
 
 struct UniformData

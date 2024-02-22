@@ -79,6 +79,10 @@ void CheckError( NSError* error )
     vertexDesc.attributes[1].format      = MTLVertexFormatFloat2;
     vertexDesc.attributes[1].offset      = offsetof( struct VertexInput, m_uv );
 
+    vertexDesc.attributes[2].bufferIndex = 0;
+    vertexDesc.attributes[2].format      = MTLVertexFormatFloat;
+    vertexDesc.attributes[2].offset      = offsetof( struct VertexInput, m_angle );
+
     vertexDesc.layouts[0].stepFunction = MTLVertexStepFunctionPerVertex;
     vertexDesc.layouts[0].stride       = sizeof( struct VertexInput );
 
