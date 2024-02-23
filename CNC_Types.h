@@ -51,7 +51,7 @@ struct UniformData
 
 struct DrawCall
 {
-    VertexInput* m_vertices;
+    VertexInput  m_vertices[6];
     u32          m_textureId;
     v2           m_position; // upper left corner
     v2           m_size;

@@ -25,7 +25,6 @@ struct Platform
 struct MemoryPool* CreateMemoryPool( u32 sizeInBytes );
 void               InitPlatform( struct Platform* platform, void* renderer );
 void*              AllocateStruct( u32 sizeInBytes, struct MemoryPool* pool );
-void*              AllocateBytes( u32 sizeInBytes, struct MemoryPool* pool );
 void               ClearMemoryPool( struct MemoryPool* pool );
 
 struct ImageFile*  LoadImageFile( const char* filename, struct MemoryPool* pool );
@@ -34,6 +33,5 @@ void               FreeImageFile( ImageFile* image );
 void               SubmitDrawCalls( void* memory, u32 numberOfDrawCalls, void* renderer );
 
 #define AllocStruct( x, pool ) (x*)AllocateStruct( sizeof(x), pool )
-#define AllocBytes(  x, pool )     AllocateBytes( x, pool )
 
 #endif//CNC_PLATFORM_H

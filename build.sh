@@ -1,6 +1,6 @@
 FRAMEWORKS='-framework AppKit -framework CoreVideo -framework Metal -framework MetalKit'
 TIMEFORMAT=%R
-FLAGS='-std=c++20 --debug'
+FLAGS='-std=c++20 -O2 -pedantic'
 IGNORE='-Wno-nullability-completeness'
 
 platform()
@@ -11,6 +11,8 @@ platform()
 main()
 {
     time platform
+    CODE_SIZE=$(cloc --exclude-dir=libs . | grep -o -E '([0-9]+)' | tail -1)
+    echo "-> LINES OF CODE: " $CODE_SIZE
 }
 
 main
