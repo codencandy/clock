@@ -5,9 +5,11 @@
 
 #define SCREEN_WIDTH  600
 #define SCREEN_HEIGHT 600
-#define CNC_PI 3.14159265359
-#define KILOBYTE 1024
-#define MEGABYTE(x) (x*KILOBYTE)
+#define CNC_PI        3.14159265359
+#define CNC_2PI       (CNC_PI * 2)
+#define CNC_PIHALF    (CNC_PI / 2)
+#define KILOBYTE      1024
+#define MEGABYTE(x)   (x*KILOBYTE)
 
 typedef unsigned int   u32;
 typedef unsigned short u16;
@@ -49,11 +51,11 @@ struct UniformData
 
 struct DrawCall
 {
+    VertexInput* m_vertices;
     u32          m_textureId;
     v2           m_position; // upper left corner
     v2           m_size;
     f32          m_angle;
-    VertexInput* m_vertices;
 };
 
 struct ImageFile

@@ -28,7 +28,7 @@ vertex VertexOutput VertexShader( VertexInput in [[stage_in]],
 {
     VertexOutput out;
 
-    float angle = in.m_angle;
+    float angle = -in.m_angle;
     // rotate the vertices 
     float2x2 rotationMatrix = {
         { cos(angle), -sin(angle) }, // important to define row major

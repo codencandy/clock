@@ -2,7 +2,8 @@
 #include <time.h>
 
 void createTextureVertices( VertexInput* vertices, f32 w, f32 h );
-void updateTextureVertices( VertexInput* vertices, f32 angle );
+void updateTextureVertices( VertexInput* vertices, u32 numVertices, f32 angle );
+void printTimeDetails( Clock* clock );
 
 void Load( Application* application )
 {
@@ -33,7 +34,7 @@ void Load( Application* application )
     
     for( u32 i=0; i<4; ++i )
     {
-        vertices = vertices + ( i*6 );
+        vertices = &vertices[i*6];
         createTextureVertices( vertices, SCREEN_WIDTH, SCREEN_HEIGHT );
     }
 
@@ -55,20 +56,22 @@ void Update( Application* application )
     clock->m_minutes = time->tm_min;
     clock->m_seconds = time->tm_sec;
 
-    clock->m_hoursAngle   = CNC_PI + ((2*CNC_PI) / 12.0) * ((clock->m_hours) + (60.0 / clock->m_minutes));
-    clock->m_minutesAngle = CNC_PI + ((2*CNC_PI) / 60.0) * clock->m_minutes;
-    clock->m_secondsAngle = CNC_PI + ((2*CNC_PI) / 60.0) * clock->m_seconds;
+    clock->m_hoursAngle   = (CNC_2PI / 12.0) * clock->m_hours;
+    clock->m_minutesAngle = (CNC_2PI / 60.0) * clock->m_minutes;
+    clock->m_secondsAngle = (CNC_2PI / 60.0) * clock->m_seconds;
+
+    printTimeDetails( clock );
 
     VertexInput* vertices = application->m_vertices;
 
-    VertexInput* backgroundVertices  = vertices;
-    VertexInput* hourHandVertices    = vertices + 6;
-    VertexInput* minutesHandVertices = vertices + 12;
-    VertexInput* secondsHandVertices = vertices + 18;
+    VertexInput* backgroundVertices  = &vertices[0];
+    VertexInput* hourHandVertices    = &vertices[6];
+    VertexInput* minutesHandVertices = &vertices[12];
+    VertexInput* secondsHandVertices = &vertices[18];
 
-    updateTextureVertices( hourHandVertices,    clock->m_hoursAngle );
-    updateTextureVertices( minutesHandVertices, clock->m_minutesAngle );
-    updateTextureVertices( secondsHandVertices, clock->m_secondsAngle );
+    updateTextureVertices( hourHandVertices,    6, clock->m_hoursAngle );
+    updateTextureVertices( minutesHandVertices, 6, clock->m_minutesAngle );
+    updateTextureVertices( secondsHandVertices, 6, clock->m_secondsAngle );
 }
 
 void Render( Application* application )
@@ -133,15 +136,15 @@ void createTextureVertices( VertexInput* vertices, f32 w, f32 h )
     v3 D = { 0.0f, 0.0f, 0.0f };
 
     /*
-        P4 ---- P3
-        |       |
-        P1 ---- P2
+        P4(0,0) ---- P3(1,0)
+        |                  |
+        P1(0,1) ---- P2(1,1)
      */
 
-    v2 P1 = { 0.0f, 0.0f };
-    v2 P2 = { 1.0f, 0.0f };
-    v2 P3 = { 1.0f, 1.0f };
-    v2 P4 = { 0.0f, 1.0f };
+    v2 P1 = { 0.0f, 1.0f };
+    v2 P2 = { 1.0f, 1.0f };
+    v2 P3 = { 1.0f, 0.0f };
+    v2 P4 = { 0.0f, 0.0f };
 
     quad[0].m_position = A;
     quad[0].m_uv       = P1;
@@ -157,14 +160,23 @@ void createTextureVertices( VertexInput* vertices, f32 w, f32 h )
     quad[5].m_uv       = P1;  
 }
 
-void updateTextureVertices( VertexInput* vertices, f32 angle )
+void updateTextureVertices( VertexInput* vertices, u32 numVertices, f32 angle )
 {
     struct VertexInput* quad = vertices;
 
-    quad[0].m_angle = -angle;
-    quad[1].m_angle = -angle;
-    quad[2].m_angle = -angle;
-    quad[3].m_angle = -angle;
-    quad[4].m_angle = -angle;
-    quad[5].m_angle = -angle;
+    for( u32 i=0; i<numVertices; ++i )
+    {
+        quad[i].m_angle = angle;
+    }
+}
+
+void printTimeDetails( Clock* clock )
+{
+    f32 toDegreesFactor = CNC_2PI / 360.0f;
+
+    printf( "%d:%d:%d\n", clock->m_hours, clock->m_minutes, clock->m_seconds );
+    printf( "hours angle:   %f\n", clock->m_hoursAngle   / toDegreesFactor );
+    printf( "minutes angle: %f\n", clock->m_minutesAngle / toDegreesFactor );
+    printf( "seconds angle: %f\n", clock->m_secondsAngle / toDegreesFactor );
+    fflush( NULL );
 }
