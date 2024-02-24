@@ -23,7 +23,9 @@ All you need to follow along or just build this project is:
 
 # How to build and run
 
-In order to build the project execute 
-```sh build.sh``` in the root directory of this project
+In order to build the project execute <br>
+```sh build.sh``` <br>
+in the root directory of this project
 
-In order to run execute ```./clock````
+In order to run execute <br>
+```./clock```
