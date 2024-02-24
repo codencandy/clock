@@ -4,12 +4,13 @@
 
 This small project builds an analog clock featuring the following concepts:
 
+- creating an application object
 - creating a window
 - unity build
-- creating an application object
 - drawing with a constant frame rate
 - creating a hardware renderer using the Metal framework
 - loading images (PNG files)
+- GPU shaders (Metal shading language)
 - texture mapping
 - 2D projection
 - 2D rotation
