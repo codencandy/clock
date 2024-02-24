@@ -46,7 +46,7 @@ void Update( Application* application )
     clock->m_minutes = time->tm_min;
     clock->m_seconds = time->tm_sec;
 
-    clock->m_hoursAngle   = (CNC_2PI / 12.0) * ((f32)clock->m_hours + (60.0 / (f32)clock->m_minutes));
+    clock->m_hoursAngle   = (CNC_2PI / 12.0) * ((f32)clock->m_hours + ((f32)clock->m_minutes) / 60.0f);
     clock->m_minutesAngle = (CNC_2PI / 60.0) * clock->m_minutes;
     clock->m_secondsAngle = (CNC_2PI / 60.0) * clock->m_seconds;
 }
