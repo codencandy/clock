@@ -2,9 +2,10 @@
 
 ## Analog clock app for MacOS
 
-This small projects builds an analog clock featuring the following concepts:
+This small project builds an analog clock featuring the following concepts:
 
 - creating a window
+- unity build
 - creating an application object
 - drawing with a constant frame rate
 - creating a hardware renderer using the Metal framework
