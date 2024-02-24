@@ -22,6 +22,8 @@ All you need to follow along or just build this project is:
 
 - Visual Studio Code
 - XCode command line tools (not XCode itself)
+- [cloc to measure lines of code](https://formulae.brew.sh/formula/cloc)
+
 
 # How to build and run
 

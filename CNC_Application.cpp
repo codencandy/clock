@@ -106,9 +106,9 @@ void createTextureVertices( VertexInput* vertices, f32 w, f32 h )
     struct VertexInput* quad = vertices;
     
     /*
-        D ---- C
-        |      |
-        A ---- B
+        D(0,0) ---- C(w,0)
+        |                |
+        A(0,h) ---- B(w,h)
     */
     v3 A = { 0.0f,    h, 0.0f };
     v3 B = {    w,    h, 0.0f };

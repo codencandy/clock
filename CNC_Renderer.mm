@@ -177,7 +177,7 @@ void CreateProjection2d( Renderer* renderer, f32 w, f32 h )
         upper left in world space is 0,0
         upper left in projection space -1,1
 
-        lower right in world space is 1,1
+        lower right in world space is w,h
         lower right in projection space is 1,-1
 
         |x| |a 0 0 e|
