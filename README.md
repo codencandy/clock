@@ -32,7 +32,7 @@ The following VS Code extensions are also partly necessary:
 - [C/C++ Clang Command Adapter](https://marketplace.visualstudio.com/items?itemName=mitaki28.vscode-clang)
 - [Metal Shader Extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=doublebuffer.metal-shader)
 
-# How to build and run
+## How to build and run
 
 In order to build the project execute <br>
 ```sh build.sh``` <br>
