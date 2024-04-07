@@ -15,23 +15,27 @@ void Load( Application* application )
     ImageFile* knob    = platform->loadImage( "res/clock_knob.png",    application->m_permanentMemory );
     ImageFile* hours   = platform->loadImage( "res/clock_hours.png",   application->m_permanentMemory );
     ImageFile* minutes = platform->loadImage( "res/clock_minutes.png", application->m_permanentMemory );
+    ImageFile* dash    = platform->loadImage( "res/clock_dash.png",    application->m_permanentMemory );
 
     void* renderer = platform->m_renderer;
 
-    bg->m_textureId      = platform->uploadToGpu( bg, renderer );
-    knob->m_textureId    = platform->uploadToGpu( knob, renderer );
-    hours->m_textureId   = platform->uploadToGpu( hours, renderer );
+    bg->m_textureId      = platform->uploadToGpu( bg,      renderer );
+    knob->m_textureId    = platform->uploadToGpu( knob,    renderer );
+    hours->m_textureId   = platform->uploadToGpu( hours,   renderer );
     minutes->m_textureId = platform->uploadToGpu( minutes, renderer );
+    dash->m_textureId    = platform->uploadToGpu( dash,    renderer );
 
     application->m_bg      = bg;
     application->m_knob    = knob;
     application->m_hours   = hours;
     application->m_minutes = minutes;
+    application->m_dash    = dash;
 
     platform->freeImageFile( bg );
     platform->freeImageFile( knob );
     platform->freeImageFile( hours );
     platform->freeImageFile( minutes );
+    platform->freeImageFile( dash );
 }
 
 void Update( Application* application )
@@ -61,6 +65,7 @@ void Render( Application* application )
     DrawCall* newMinutes = AllocStruct( DrawCall, transientPool );
     DrawCall* newHours   = AllocStruct( DrawCall, transientPool );
     DrawCall* knob       = AllocStruct( DrawCall, transientPool );
+    DrawCall* dash       = AllocStruct( DrawCall, transientPool );
 
     f32 w = 600.0f;
     f32 h = 600.0f;
@@ -94,8 +99,15 @@ void Render( Application* application )
     knob->m_angle     = 0.0f;
     createTextureVertices( knob->m_vertices, knobSize.x, knobSize.y, w/2 - (knobSize.x / 2), h/2 - (knobSize.y / 2) );
     updateTextureVertices( knob->m_vertices, 6, 0.0f );
+
+    v2 dashSize = vec2( application->m_dash->m_width, application->m_dash->m_height );
+    dash->m_textureId = application->m_dash->m_textureId;
+    dash->m_size      = dashSize;
+    dash->m_position  = vec2( w/2, h/2 );
+    createTextureVertices( dash->m_vertices, dashSize.x, dashSize.y, w/2 - (dashSize.x / 2), 90.0f );
+    updateTextureVertices( dash->m_vertices, 6, 0.0f );
     
-    application->m_platform.submitDrawCalls( transientPool->m_memory, 4, application->m_platform.m_renderer );
+    application->m_platform.submitDrawCalls( transientPool->m_memory, 5, application->m_platform.m_renderer );
 }
 
 void Exit( Application* application )
