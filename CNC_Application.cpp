@@ -15,6 +15,9 @@ void Load( Application* application )
     ImageFile* hoursHand   = platform->loadImage( "res/hours_hand.png", application->m_permanentMemory );
     ImageFile* minutesHand = platform->loadImage( "res/minutes_hand.png", application->m_permanentMemory );
     ImageFile* secondsHand = platform->loadImage( "res/seconds_hand.png", application->m_permanentMemory );
+    
+    ImageFile* bg   = platform->loadImage( "res/clock_bg.png",   application->m_permanentMemory );
+    ImageFile* knob = platform->loadImage( "res/clock_knob.png", application->m_permanentMemory );
 
     void* renderer = platform->m_renderer;
 
@@ -23,15 +26,24 @@ void Load( Application* application )
     minutesHand->m_textureId = platform->uploadToGpu( minutesHand, renderer );
     secondsHand->m_textureId = platform->uploadToGpu( secondsHand, renderer );
 
+    bg->m_textureId   = platform->uploadToGpu( bg, renderer );
+    knob->m_textureId = platform->uploadToGpu( knob, renderer );
+
     application->m_background  = background;
     application->m_hoursHand   = hoursHand;
     application->m_minutesHand = minutesHand;
     application->m_secondsHand = secondsHand;
 
+    application->m_bg   = bg;
+    application->m_knob = knob;
+
     platform->freeImageFile( background );
     platform->freeImageFile( hoursHand );
     platform->freeImageFile( minutesHand );
     platform->freeImageFile( secondsHand );
+
+    platform->freeImageFile( bg );
+    platform->freeImageFile( knob );
 }
 
 void Update( Application* application )
@@ -65,7 +77,7 @@ void Render( Application* application )
     f32 w = 600.0f;
     f32 h = 600.0f;
 
-    background->m_textureId = application->m_background->m_textureId;
+    background->m_textureId = application->m_bg->m_textureId;
     background->m_size      = vec2( w, h );
     background->m_position  = vec2( 0.0f, 0.0f );
     background->m_angle     = 0.0f;
