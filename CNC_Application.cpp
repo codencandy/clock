@@ -1,7 +1,7 @@
 #include "CNC_Application.h"
 #include <time.h>
 
-void createTextureVertices( VertexInput* vertices, f32 w, f32 h );
+void createTextureVertices( VertexInput* vertices, f32 w, f32 h, f32 x, f32 y );
 void updateTextureVertices( VertexInput* vertices, u32 numVertices, f32 angle );
 
 void Load( Application* application )
@@ -11,11 +11,6 @@ void Load( Application* application )
     application->m_permanentMemory = CreateMemoryPool( MEGABYTE(100) );
     application->m_transientMemory = CreateMemoryPool( MEGABYTE(100) );
 
-    ImageFile* background  = platform->loadImage( "res/background.png", application->m_permanentMemory );
-    ImageFile* hoursHand   = platform->loadImage( "res/hours_hand.png", application->m_permanentMemory );
-    ImageFile* minutesHand = platform->loadImage( "res/minutes_hand.png", application->m_permanentMemory );
-    ImageFile* secondsHand = platform->loadImage( "res/seconds_hand.png", application->m_permanentMemory );
-    
     ImageFile* bg      = platform->loadImage( "res/clock_bg.png",      application->m_permanentMemory );
     ImageFile* knob    = platform->loadImage( "res/clock_knob.png",    application->m_permanentMemory );
     ImageFile* hours   = platform->loadImage( "res/clock_hours.png",   application->m_permanentMemory );
@@ -23,30 +18,15 @@ void Load( Application* application )
 
     void* renderer = platform->m_renderer;
 
-    background->m_textureId  = platform->uploadToGpu( background, renderer );
-    hoursHand->m_textureId   = platform->uploadToGpu( hoursHand, renderer );
-    minutesHand->m_textureId = platform->uploadToGpu( minutesHand, renderer );
-    secondsHand->m_textureId = platform->uploadToGpu( secondsHand, renderer );
-
     bg->m_textureId      = platform->uploadToGpu( bg, renderer );
     knob->m_textureId    = platform->uploadToGpu( knob, renderer );
     hours->m_textureId   = platform->uploadToGpu( hours, renderer );
     minutes->m_textureId = platform->uploadToGpu( minutes, renderer );
 
-    application->m_background  = background;
-    application->m_hoursHand   = hoursHand;
-    application->m_minutesHand = minutesHand;
-    application->m_secondsHand = secondsHand;
-
     application->m_bg      = bg;
     application->m_knob    = knob;
     application->m_hours   = hours;
     application->m_minutes = minutes;
-
-    platform->freeImageFile( background );
-    platform->freeImageFile( hoursHand );
-    platform->freeImageFile( minutesHand );
-    platform->freeImageFile( secondsHand );
 
     platform->freeImageFile( bg );
     platform->freeImageFile( knob );
@@ -78,9 +58,9 @@ void Render( Application* application )
 
     // render the clock
     DrawCall* background = AllocStruct( DrawCall, transientPool );
-    DrawCall* hours      = AllocStruct( DrawCall, transientPool );
-    DrawCall* minutes    = AllocStruct( DrawCall, transientPool );
-    DrawCall* seconds    = AllocStruct( DrawCall, transientPool );
+    DrawCall* newMinutes = AllocStruct( DrawCall, transientPool );
+    DrawCall* newHours   = AllocStruct( DrawCall, transientPool );
+    DrawCall* knob       = AllocStruct( DrawCall, transientPool );
 
     f32 w = 600.0f;
     f32 h = 600.0f;
@@ -89,28 +69,31 @@ void Render( Application* application )
     background->m_size      = vec2( w, h );
     background->m_position  = vec2( 0.0f, 0.0f );
     background->m_angle     = 0.0f;
-    createTextureVertices( background->m_vertices, w, w );
+    createTextureVertices( background->m_vertices, w, h, 0.0f, 0.0f );
     
-    hours->m_textureId      = application->m_hoursHand->m_textureId;
-    hours->m_size           = vec2( w, h );
-    hours->m_position       = vec2( 0.0f, 0.0f );
-    hours->m_angle          = application->m_clock.m_hoursAngle;
-    createTextureVertices( hours->m_vertices, w, h );
-    updateTextureVertices( hours->m_vertices, 6, application->m_clock.m_hoursAngle );
-    
-    minutes->m_textureId    = application->m_minutesHand->m_textureId;
-    minutes->m_size         = vec2( w, h );
-    minutes->m_position     = vec2( 0.0f, 0.0f );
-    minutes->m_angle        = application->m_clock.m_minutesAngle;
-    createTextureVertices( minutes->m_vertices, w, h );
-    updateTextureVertices( minutes->m_vertices, 6, application->m_clock.m_minutesAngle );
-    
-    seconds->m_textureId    = application->m_secondsHand->m_textureId;
-    seconds->m_size         = vec2( w, h );
-    seconds->m_position     = vec2( 0.0f, 0.0f );
-    seconds->m_angle        = application->m_clock.m_secondsAngle;
-    createTextureVertices( seconds->m_vertices, w, h );
-    updateTextureVertices( seconds->m_vertices, 6, application->m_clock.m_secondsAngle );
+    v2 minutesSize = vec2( application->m_minutes->m_width, application->m_minutes->m_height );
+    newMinutes->m_textureId = application->m_minutes->m_textureId;
+    newMinutes->m_size      = minutesSize;
+    newMinutes->m_position  = vec2( w/2, h/2);
+    newMinutes->m_angle     = application->m_clock.m_minutesAngle;
+    createTextureVertices( newMinutes->m_vertices, minutesSize.x, minutesSize.y, w/2 - (minutesSize.x / 2), h/2 - (minutesSize.y) );
+    updateTextureVertices( newMinutes->m_vertices, 6, application->m_clock.m_minutesAngle ); 
+
+    v2 hoursSize = vec2( application->m_hours->m_width, application->m_hours->m_height );
+    newHours->m_textureId = application->m_hours->m_textureId;
+    newHours->m_size      = hoursSize;
+    newHours->m_position  = vec2( w/2, h/2 );
+    newHours->m_angle     = application->m_clock.m_hoursAngle;
+    createTextureVertices( newHours->m_vertices, hoursSize.x, hoursSize.y, w/2 - (hoursSize.x / 2), h/2 - (hoursSize.y) );
+    updateTextureVertices( newHours->m_vertices, 6, application->m_clock.m_hoursAngle );
+
+    v2 knobSize = vec2( application->m_knob->m_width, application->m_knob->m_height );
+    knob->m_textureId = application->m_knob->m_textureId;
+    knob->m_size      = knobSize;
+    knob->m_position  = vec2( w/2, h/2 );
+    knob->m_angle     = 0.0f;
+    createTextureVertices( knob->m_vertices, knobSize.x, knobSize.y, w/2 - (knobSize.x / 2), h/2 - (knobSize.y / 2) );
+    updateTextureVertices( knob->m_vertices, 6, 0.0f );
     
     application->m_platform.submitDrawCalls( transientPool->m_memory, 4, application->m_platform.m_renderer );
 }
@@ -121,7 +104,7 @@ void Exit( Application* application )
 }
 
 // private implementation 
-void createTextureVertices( VertexInput* vertices, f32 w, f32 h )
+void createTextureVertices( VertexInput* vertices, f32 w, f32 h, f32 x, f32 y )
 {
     struct VertexInput* quad = vertices;
     
@@ -130,10 +113,10 @@ void createTextureVertices( VertexInput* vertices, f32 w, f32 h )
         |                |
         A(0,h) ---- B(w,h)
     */
-    v3 A = { 0.0f,    h, 0.0f };
-    v3 B = {    w,    h, 0.0f };
-    v3 C = {    w, 0.0f, 0.0f };
-    v3 D = { 0.0f, 0.0f, 0.0f };
+    v3 A = {    x,   h+y, 0.0f };
+    v3 B = {    x+w, h+y, 0.0f };
+    v3 C = {    x+w,   y, 0.0f };
+    v3 D = {    x,     y, 0.0f };
 
     /*
         P4(0,0) ---- P3(1,0)

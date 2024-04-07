@@ -22,11 +22,6 @@ struct Application
     MemoryPool* m_permanentMemory;
     MemoryPool* m_transientMemory;
 
-    ImageFile*  m_background;
-    ImageFile*  m_hoursHand;
-    ImageFile*  m_minutesHand;
-    ImageFile*  m_secondsHand;
-
     ImageFile*  m_bg;
     ImageFile*  m_knob;
     ImageFile*  m_hours;
