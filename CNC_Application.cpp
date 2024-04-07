@@ -16,8 +16,10 @@ void Load( Application* application )
     ImageFile* minutesHand = platform->loadImage( "res/minutes_hand.png", application->m_permanentMemory );
     ImageFile* secondsHand = platform->loadImage( "res/seconds_hand.png", application->m_permanentMemory );
     
-    ImageFile* bg   = platform->loadImage( "res/clock_bg.png",   application->m_permanentMemory );
-    ImageFile* knob = platform->loadImage( "res/clock_knob.png", application->m_permanentMemory );
+    ImageFile* bg      = platform->loadImage( "res/clock_bg.png",      application->m_permanentMemory );
+    ImageFile* knob    = platform->loadImage( "res/clock_knob.png",    application->m_permanentMemory );
+    ImageFile* hours   = platform->loadImage( "res/clock_hours.png",   application->m_permanentMemory );
+    ImageFile* minutes = platform->loadImage( "res/clock_minutes.png", application->m_permanentMemory );
 
     void* renderer = platform->m_renderer;
 
@@ -26,16 +28,20 @@ void Load( Application* application )
     minutesHand->m_textureId = platform->uploadToGpu( minutesHand, renderer );
     secondsHand->m_textureId = platform->uploadToGpu( secondsHand, renderer );
 
-    bg->m_textureId   = platform->uploadToGpu( bg, renderer );
-    knob->m_textureId = platform->uploadToGpu( knob, renderer );
+    bg->m_textureId      = platform->uploadToGpu( bg, renderer );
+    knob->m_textureId    = platform->uploadToGpu( knob, renderer );
+    hours->m_textureId   = platform->uploadToGpu( hours, renderer );
+    minutes->m_textureId = platform->uploadToGpu( minutes, renderer );
 
     application->m_background  = background;
     application->m_hoursHand   = hoursHand;
     application->m_minutesHand = minutesHand;
     application->m_secondsHand = secondsHand;
 
-    application->m_bg   = bg;
-    application->m_knob = knob;
+    application->m_bg      = bg;
+    application->m_knob    = knob;
+    application->m_hours   = hours;
+    application->m_minutes = minutes;
 
     platform->freeImageFile( background );
     platform->freeImageFile( hoursHand );
@@ -44,6 +50,8 @@ void Load( Application* application )
 
     platform->freeImageFile( bg );
     platform->freeImageFile( knob );
+    platform->freeImageFile( hours );
+    platform->freeImageFile( minutes );
 }
 
 void Update( Application* application )

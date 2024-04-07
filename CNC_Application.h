@@ -29,6 +29,8 @@ struct Application
 
     ImageFile*  m_bg;
     ImageFile*  m_knob;
+    ImageFile*  m_hours;
+    ImageFile*  m_minutes;
 
     VertexInput* m_vertices;
 };
