@@ -1,6 +1,6 @@
 FRAMEWORKS='-framework AppKit -framework CoreVideo -framework Metal -framework MetalKit'
 TIMEFORMAT=%R
-FLAGS='-lstdc++ -std=c++20 -O2 -pedantic'
+FLAGS='-lstdc++ -std=c++20 -O2 -pedantic --debug'
 IGNORE='-Wno-nullability-completeness'
 
 platform()
