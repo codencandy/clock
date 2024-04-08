@@ -12,7 +12,7 @@
 
 @implementation MainWindowDelegate
 
-- (instancetype)initWithBool:(bool*)running
+- (instancetype)initWithBool:(bool*)running;
 {
     self = [super init];
     m_running = running;
@@ -33,6 +33,7 @@
     @public
         CVDisplayLinkRef m_displayLink;
         NSCondition*     m_displayLinkSignal;
+        bool*            m_start;
 }
 @end
 
@@ -40,6 +41,10 @@
 
 - (BOOL)windowCanBecomeKey { return true; }
 - (BOOL)windowCanBecomeMain { return true; }
+- (void)mouseDown:(NSEvent *)event 
+{
+    *m_start = true;
+}
 
 @end
 
@@ -56,7 +61,7 @@ CVReturn DisplayCallback( CVDisplayLinkRef   displayLink,
     return kCVReturnSuccess;
 }                              
 
-MainWindow* CreateMainWindow( bool* running )
+MainWindow* CreateMainWindow( bool* running, bool* start )
 {
     NSRect contentRect = NSMakeRect( 0, 0, 600, 600);
     MainWindowDelegate* delegate = [[MainWindowDelegate alloc] initWithBool:running];
@@ -67,6 +72,7 @@ MainWindow* CreateMainWindow( bool* running )
     [window setTitle: @"clock by cnc"];
     [window makeKeyAndOrderFront: NULL];
     [window setDelegate: delegate];
+    window->m_start = start;
 
     window->m_displayLinkSignal = [NSCondition new];
     CVDisplayLinkCreateWithActiveCGDisplays( &window->m_displayLink );

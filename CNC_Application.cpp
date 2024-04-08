@@ -57,19 +57,96 @@ void Load( Application* application )
 
 void Update( Application* application )
 {
-    // update the clock
-    Clock* clock = &application->m_clock;
+    static bool startup1 = true;
+    static bool startup2 = true;
+    static bool startup3 = true;
+    static bool startup4 = true;
+    
+    if( !application->m_start )
+    {
+        return;
+    }
 
+    Clock* clock = &application->m_clock;
     time_t now  = time(NULL);
     tm*    time = localtime(&now); 
+    
+    // dots
+    if( startup1 )
+    {
+        static f32 secondsInc = 0.0f;
 
-    clock->m_hours   = time->tm_hour % 12;
-    clock->m_minutes = time->tm_min;
-    clock->m_seconds = time->tm_sec;
+        secondsInc += 1.7f;
 
-    clock->m_hoursAngle   = (CNC_2PI / 12.0) * ((f32)clock->m_hours + ((f32)clock->m_minutes) / 60.0f);
-    clock->m_minutesAngle = (CNC_2PI / 60.0) * clock->m_minutes;
-    clock->m_secondsAngle = (CNC_2PI / 60.0) * clock->m_seconds;
+        clock->m_seconds = (u32)secondsInc;
+
+        if( secondsInc >= time->tm_sec )
+        {
+            clock->m_seconds = time->tm_sec;
+            startup1 = false;
+        }
+    }
+    // dashes
+    else if( startup2 )
+    {
+        clock->m_seconds = time->tm_sec;
+
+        static f32 dashInc = 0.0f;
+
+        dashInc += 0.5f;
+
+        clock->m_hours = (u32)dashInc;
+
+        if( dashInc >= (time->tm_hour % 12) )
+        {
+            
+            startup2 = false;
+        }
+    }
+    // hour hand
+    else if( startup3 )
+    {
+        clock->m_seconds = time->tm_sec;
+        clock->m_hours   = time->tm_hour % 12;
+        static f32 hoursInc = 0.0f;
+
+        hoursInc += 0.2f;
+
+        clock->m_hoursAngle = hoursInc;
+
+        if( hoursInc >= (CNC_2PI / 12.0) * ((f32)clock->m_hours + ((f32)time->tm_min) / 60.0f) )
+        {
+            startup3 = false;
+        }
+    }
+    // minutes hand
+    else if( startup4 )
+    {
+        clock->m_hoursAngle = (CNC_2PI / 12.0) * ((f32)clock->m_hours + ((f32)time->tm_min) / 60.0f);
+        clock->m_seconds = time->tm_sec;
+        clock->m_hours   = time->tm_hour % 12;
+
+        static f32 minutesInc = 0.0f;
+
+        minutesInc += 0.2f;
+
+        clock->m_minutesAngle = minutesInc;
+
+        if( minutesInc >= (CNC_2PI / 60.0) * time->tm_min )
+        {
+            startup4 = false;
+        }
+    }
+    // update the clock
+    else
+    {
+        clock->m_hours   = time->tm_hour % 12;
+        clock->m_minutes = time->tm_min;
+        clock->m_seconds = time->tm_sec;
+        clock->m_hoursAngle   = (CNC_2PI / 12.0) * ((f32)clock->m_hours + ((f32)clock->m_minutes) / 60.0f);
+        clock->m_minutesAngle = (CNC_2PI / 60.0) * clock->m_minutes;
+        clock->m_secondsAngle = (CNC_2PI / 60.0) * clock->m_seconds;
+    }
 }
 
 void Render( Application* application )
@@ -145,7 +222,7 @@ void Render( Application* application )
         }
     }
     
-    application->m_platform.submitDrawCalls( transientPool->m_memory, 5 + numDashes + numDots, application->m_platform.m_renderer );
+    application->m_platform.submitDrawCalls( transientPool->m_memory, 4 + numDashes + numDots, application->m_platform.m_renderer );
 }
 
 void Exit( Application* application )

@@ -15,14 +15,16 @@ int main(void)
     [app finishLaunching];
 
     bool running = true;
+    bool start   = false;
+    
+    struct Application ClockApp      = {0};
+    struct Platform    MacosPlatform = {0};
 
-    MainWindow* window   = CreateMainWindow( &running );
+    MainWindow* window   = CreateMainWindow( &running, &ClockApp.m_start );
     Renderer*   renderer = CreateRenderer( SCREEN_WIDTH, SCREEN_HEIGHT );
 
     window.contentView = renderer->m_view;
         
-    struct Application ClockApp      = {0};
-    struct Platform    MacosPlatform = {0};
     InitPlatform( &MacosPlatform, renderer );
 
     ClockApp.m_platform = MacosPlatform;

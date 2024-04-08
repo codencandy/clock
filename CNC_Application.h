@@ -17,6 +17,7 @@ struct Clock
 
 struct Application
 {
+    bool        m_start;
     Clock       m_clock;
     Platform    m_platform;
     MemoryPool* m_permanentMemory;
